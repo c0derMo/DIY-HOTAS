@@ -1,22 +1,22 @@
-# DIY HOTAS 
+# DIY HOTAS
 
-This project will be updated, as of now only the joystick had been uploaded. The files need to be cleaned up a bit. 
+This repo documents my attempt to build my own HOTAS, based on [the one Banjer21 made](https://github.com/Banjer21/DIY-HOTAS).
+While his repo is mostly just the 3D models and a rudimentary parts list, I intend to expand on that a bit and detail some more of the build process, as well as my modifications to the original model.
+Huge thanks to the original author, the model and the engineering that went into it is insane.
 
+### Current status:
 
-## Getting started
-The files contain multiple copies of the parts. They are somewhat logically named, _org or _empty mean that these parts are original, or have no attachement points.
-They are just shells, these you can edit for your own convenience. The parts are made for specific components, which might not be optimal but do work. <br>
+> I will attempt to build my own version of the throttle and the joystick, and document my findings/issues/improvements here, for your learning.
+> Below is a short estimated status of the project.
 
+|          | Build                                                      | Code                                                                      | Document                           |
+| -------- | ---------------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------- |
+| Joystick | 50%, waiting on parts to ship, but the foundation is there | 5%, in my head there's a lot already, but very little is actually written | 0%, only this readme exists so far |
+| Throttle | 0%                                                         | 0%                                                                        | 0%                                 |
 
-## Thingiverse
-
-The 3d files will also be uploaded to thingiverse once I have finalised exporting the latest versions.
-Check out my [thingiverse](https://www.thingiverse.com/banjer21/designs) for some old designs I made. I will upload some more 3d models like the buttons and switches used in this project.
-
-
-## Issues
-
-If you have any problems or questions, feel free to post them [here](https://github.com/Banjer21/DIY-HOTAS/issues).
+- Build: Obviously includes the physical build on my desk. Mostly consisting of 3D printed parts and cheap electronics.
+- Code: I'm writing my own code for the embedded microcontrollers for this project, which will also be published here when ready.
+- Document: I'm documenting my build process, and cleaning up the repo a bit along the way, so future builders may have an easier time building this awesome HOTAS.
 
 ## License
 
