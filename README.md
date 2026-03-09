@@ -9,10 +9,10 @@ Huge thanks to the original author, the model and the engineering that went into
 > I will attempt to build my own version of the throttle and the joystick, and document my findings/issues/improvements here, for your learning.
 > Below is a short estimated status of the project.
 
-|          | Build                                                      | Code                                                                      | Document                           |
-| -------- | ---------------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------- |
-| Joystick | 50%, waiting on parts to ship, but the foundation is there | 5%, in my head there's a lot already, but very little is actually written | 0%, only this readme exists so far |
-| Throttle | 0%                                                         | 0%                                                                        | 0%                                 |
+|          | Build                                                      | Code                                                                                                                | Document |
+| -------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------- |
+| Joystick | 51%, waiting on parts to ship, but the foundation is there | 40%, communication between the MCUs exist, and the STM32 board is recognized as a joystick, with rudimentary inputs | 40%      |
+| Throttle | 0%                                                         | 0%                                                                                                                  | 0%       |
 
 - Build: Obviously includes the physical build on my desk. Mostly consisting of 3D printed parts and cheap electronics.
 - Code: I'm writing my own code for the embedded microcontrollers for this project, which will also be published here when ready.
