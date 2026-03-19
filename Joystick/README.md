@@ -31,6 +31,9 @@ So instead, I opted to handwire everything.
 It's certainly possible, but a bit nervewracking, since you dont have a ton of space inside the joystick, especially the head, where the majority of the parts are.
 Since I want to be able to somewhat take the device apart again, to allow for easier repairs or future mods, I also split the wiring into many parts.
 To connect the individual parts, small connectors are certainly a must, my first idea of using Dupont connectors proved far too big (and annoying), so I opted for JST connectors instead.
+Now that I am almost done with the stick, I have to reiterate: There is not a lot of space inside the stick.
+It might seem like much when you start, but throw in 4 five-way switches, a joystick and 9 additional buttons you have to wire together to a matrix, and it gets crammed very fast.
+It is a wise idea to plan your wiring first, I had to rewire the joystick head once, because all the wires and connectors wouldn't fit inside.
 
 ### No Z-Axis
 In my head, joysticks should not rotate in my hand while I'm using them, therefore I removed the Z-Axis functionality from the stick.
@@ -67,7 +70,7 @@ For some reason when printing this at original size, it wouldn't fit over the sc
 
 #### Gimbal Mainframe & Case
 
-The entire project is designed so well by the original author, but here they definitely screwed up.
-If you print the original Case and Gimbal Mainframe, while putting them together, you will figure out that the Mainframe intersects the Case in two corners near the Y-Axis.
+I have to amend my previous statement here, I think the updated files introduced this error, as there is more volume in the "updated" one-part base compared to the original four-part base.
+If you print the updated Case and Gimbal Mainframe, while putting them together, you will figure out that the Mainframe intersects the Case in two corners near the Y-Axis.
 I had to file off quite a bit of both of these edges (you can see the infill in those corners now), to make it fit.
 Do yourself a favor, and before printing these, go into the 3D model and make sure those parts fit together without intersecting, otherwise you'll have to file quite a lot. :D

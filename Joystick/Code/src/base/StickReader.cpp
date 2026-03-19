@@ -1,13 +1,15 @@
 #include <Arduino.h>
+#include <Adafruit_TinyUSB.h>
 #include "StickReader.h"
+#include "AxisPostProcessor.h"
 #include "wiring_analog.h"
 
 StickReader::StickReader(uint32_t xPin, uint32_t yPin) {
     this->xPin = xPin;
     this->yPin = yPin;
-    
-    this->rawX = (StickReader::maxX - StickReader::minX) / 2;
-    this->rawY = (StickReader::maxY - StickReader::minY) / 2;
+
+    this->xAxis = new AxisPostProcessor("X", this->alpha, this->centerX, this->minX, this->maxX, this->deadzone);
+    this->yAxis = new AxisPostProcessor("Y", this->alpha, this->centerY, this->minY, this->maxY, this->deadzone);
 }
 
 void StickReader::begin() {
@@ -16,31 +18,32 @@ void StickReader::begin() {
 }
 
 void StickReader::read() {
-    this->rawX = analogRead(this->xPin);
-    this->rawY = analogRead(this->yPin);
+    this->xAxis->process(analogRead(this->xPin));
+    // SerialTinyUSB.print(",");
+    this->yAxis->process(analogRead(this->yPin));
+    // SerialTinyUSB.println("");
 }
 
 double StickReader::getX() {
-    return
-        StickReader::mix(0, 0.5, StickReader::minX, StickReader::centerX, this->rawX) +
-        StickReader::mix(0, 0.5, StickReader::centerX, StickReader::maxX, this->rawX);
+    if (StickReader::invertX) {
+        return -this->xAxis->getValue();
+    } else {
+        return this->xAxis->getValue();
+    }
 }
 
 double StickReader::getY() {
-    return
-        StickReader::mix(0, 0.5, StickReader::minY, StickReader::centerY, this->rawY) +
-        StickReader::mix(0, 0.5, StickReader::centerY, StickReader::maxY, this->rawY);
+    if (StickReader::invertY) {
+        return -this->yAxis->getValue();
+    } else {
+        return this->yAxis->getValue();
+    }
 }
 
-uint32_t StickReader::getRawX() {
-    return this->rawX;
+double StickReader::getRawX() {
+    return this->xAxis->getRawValue();
 }
 
-uint32_t StickReader::getRawY() {
-    return this->rawY;
-}
-
-double StickReader::mix(double y0, double y1, double x0, double x1, double x) {
-    double f = constrain((x - x0) / (x1 - x0), 0.0, 1.0);
-    return y0 * (1.0 - f) + y1 * f;
+double StickReader::getRawY() {
+    return this->yAxis->getRawValue();
 }

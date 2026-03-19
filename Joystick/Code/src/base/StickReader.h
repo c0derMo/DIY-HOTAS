@@ -1,34 +1,37 @@
 #ifndef STICKREADER_H
 #define STICKREADER_H
 
+#include "AxisPostProcessor.h"
 #include <Arduino.h>
 
 class StickReader {
     private:
+        AxisPostProcessor *xAxis;
+        AxisPostProcessor *yAxis;
         uint32_t xPin;
         uint32_t yPin;
 
-        uint32_t rawX;
-        uint32_t rawY;
+        static const uint32_t minX = 570;
+        static const uint32_t maxX = 930;
+        static const uint32_t centerX = 780;
+        static const bool invertX = false;
 
-        static const uint32_t minX = 640;
-        static const uint32_t maxX = 860;
-        static const uint32_t centerX = 800;
+        static const uint32_t minY = 660;
+        static const uint32_t maxY = 805;
+        static const uint32_t centerY = 725;
+        static const bool invertY = true;
 
-        static const uint32_t minY = 680;
-        static const uint32_t maxY = 820;
-        static const uint32_t centerY = 740;
+        static constexpr double alpha = 0.2;
+        static constexpr double deadzone = 0.03;
 
-        static double mix(double y0, double y1, double x0, double x1, double x);
-    
     public:
         StickReader(uint32_t xPin, uint32_t yPin);
         void begin();
         void read();
         double getX();
         double getY();
-        uint32_t getRawX();
-        uint32_t getRawY();
+        double getRawX();
+        double getRawY();
 };
 
 #endif

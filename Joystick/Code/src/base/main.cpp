@@ -3,18 +3,16 @@
 #include "arduino/Adafruit_USBD_Device.h"
 #include "shared/config.h"
 #include "shared/HOTASMessage.h"
+#include "HIDDescriptor.h"
 #include <Adafruit_TinyUSB.h>
+#include <cstring>
 
 HardwareSerial StickSerial(PA3, PA2);
 StickReader StickReader(PB0, PB1);
 
-uint8_t const desc_hid_report[] = {
-    TUD_HID_REPORT_DESC_GAMEPAD()
-};
-
 Adafruit_USBD_HID usb_hid;
 
-hid_gamepad_report_t gp;
+hid_report_t gp;
 
 uint8_t messageIndex = 0;
 uint8_t messageBuffer[HOTASMessage::MAX_ENCODED_SIZE];
@@ -26,9 +24,10 @@ void setup() {
     if (!TinyUSBDevice.isInitialized()) {
         TinyUSBDevice.begin(0);
     }
-    
+
     usb_hid.setPollInterval(2);
     usb_hid.setReportDescriptor(desc_hid_report, sizeof(desc_hid_report));
+    usb_hid.setStringDescriptor("HOTAS Stick");
     usb_hid.begin();
 
     if (TinyUSBDevice.mounted()) {
@@ -37,9 +36,9 @@ void setup() {
         TinyUSBDevice.attach();
     }
 
-    while (!SerialTinyUSB);
+    // while (!SerialTinyUSB);
 
-    SerialTinyUSB.println("Ready to relay :D");
+    SerialTinyUSB.println("Stick ready :D");
 }
 
 String handleMessage() {
@@ -49,14 +48,26 @@ String handleMessage() {
     }
 
     String out = "";
-    gp.buttons = 0;
+    memset(gp.buttons, 0, (NUM_BUTTONS + 7) / 8);
+    int bit = 0;
     for (int i = 0; i < INPUT_5WAY_COUNT; i++) {
         for (int j = 0; j < 5; j++) {
             if (message.getFiveWay(i, (FiveWayDirection) j)) {
-                gp.buttons |= (1U << (i*5+j));
+                gp.buttons[bit / 8] |= (1U << (bit % 8));
                 out += "5-Way " + String(i) + " Button " + String(j) + " ";
             }
+            bit += 1;
         }
+    }
+    for (int i = 0; i < INPUT_BUTTON_COUNT; i++) {
+        if (message.getButton(i)) {
+            gp.buttons[bit / 8] |= (1U << (bit % 8));
+            out += "Button " + String(i) + " ";
+        }
+        bit += 1;
+    }
+    for (int i = 0; i < INPUT_JOYSTICK_COUNT; i++) {
+        out += "Joystick " + String(i) + " X: " + String(message.getJoystickX(i)) + " Y: " + String(message.getJoystickY(i));
     }
 
     return out;
@@ -76,13 +87,15 @@ void loop() {
     }
 
     StickReader.read();
-    SerialTinyUSB.println(msg + " X: " + String(StickReader.getX()) + " (" + String(StickReader.getRawX()) + ") Y: " + String(StickReader.getY()) + " (" + String(StickReader.getRawY()) + ")");
-    gp.x = (StickReader.getX() * 254) - 127;
-    gp.y = (StickReader.getY() * 254) - 127;
+    if (msg != "") {
+        SerialTinyUSB.println(msg + " X: " + String(StickReader.getX()) + " (" + String(StickReader.getRawX()) + ") Y: " + String(StickReader.getY()) + " (" + String(StickReader.getRawY()) + ")");
+    }
+    gp.axes[0] = StickReader.getX() * 127;
+    gp.axes[1] = StickReader.getY() * 127;
 
     if (TinyUSBDevice.mounted() && usb_hid.ready()) {
         usb_hid.sendReport(0, &gp, sizeof(gp));
     }
 
-    delay(DELAY_TIME / 2);
+    delay(DELAY_TIME);
 }

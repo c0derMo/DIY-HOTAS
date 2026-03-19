@@ -9,10 +9,10 @@ Huge thanks to the original author, the model and the engineering that went into
 > I will attempt to build my own version of the throttle and the joystick, and document my findings/issues/improvements here, for your learning.
 > Below is a short estimated status of the project.
 
-|          | Build                                                      | Code                                                                                                                | Document |
-| -------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------- |
-| Joystick | 51%, waiting on parts to ship, but the foundation is there | 40%, communication between the MCUs exist, and the STM32 board is recognized as a joystick, with rudimentary inputs | 40%      |
-| Throttle | 0%                                                         | 0%                                                                                                                  | 0%       |
+|          | Build                                                     | Code                                                                                 | Document |
+| -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------- |
+| Joystick | 95%, the thumb joystick broke and my springs are too weak | 90%, the stick kinda works, but I wanna add stuff like calibration support and stuff | 60%      |
+| Throttle | 0%                                                        | 0%                                                                                   | 0%       |
 
 - Build: Obviously includes the physical build on my desk. Mostly consisting of 3D printed parts and cheap electronics.
 - Code: I'm writing my own code for the embedded microcontrollers for this project, which will also be published here when ready.
