@@ -8,8 +8,8 @@ StickReader::StickReader(uint32_t xPin, uint32_t yPin) {
     this->xPin = xPin;
     this->yPin = yPin;
 
-    this->xAxis = new AxisPostProcessor("X", this->alpha, this->centerX, this->minX, this->maxX, this->deadzone);
-    this->yAxis = new AxisPostProcessor("Y", this->alpha, this->centerY, this->minY, this->maxY, this->deadzone);
+    this->xAxis = new AxisPostProcessor(this->alpha, this->centerX, this->minX, this->maxX, this->deadzone);
+    this->yAxis = new AxisPostProcessor(this->alpha, this->centerY, this->minY, this->maxY, this->deadzone);
 }
 
 void StickReader::begin() {
@@ -19,9 +19,7 @@ void StickReader::begin() {
 
 void StickReader::read() {
     this->xAxis->process(analogRead(this->xPin));
-    // SerialTinyUSB.print(",");
     this->yAxis->process(analogRead(this->yPin));
-    // SerialTinyUSB.println("");
 }
 
 double StickReader::getX() {

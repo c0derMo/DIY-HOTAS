@@ -9,7 +9,6 @@ class AxisPostProcessor {
         double rawValue;
         double processedValue;
 
-        String prefix;
         double center;
         double min;
         double max;
@@ -21,7 +20,7 @@ class AxisPostProcessor {
         double applyDeadzone(double value);
         double linearize(double value);
     public:
-        AxisPostProcessor(String prefix, double alpha, double center, double min, double max, double deadzone);
+        AxisPostProcessor(double alpha, double center, double min, double max, double deadzone);
         void process(int value);
         double getValue();
         double getRawValue();

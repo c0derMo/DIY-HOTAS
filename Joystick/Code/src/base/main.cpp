@@ -1,14 +1,20 @@
 #include <Arduino.h>
+#include "AxisPostProcessor.h"
 #include "StickReader.h"
 #include "arduino/Adafruit_USBD_Device.h"
 #include "shared/config.h"
 #include "shared/HOTASMessage.h"
 #include "HIDDescriptor.h"
 #include <Adafruit_TinyUSB.h>
-#include <cstring>
+// #include <EEPROM.h>
 
 HardwareSerial StickSerial(PA3, PA2);
 StickReader StickReader(PB0, PB1);
+
+AxisPostProcessor* ThumbstickProcessors[] = {
+    new AxisPostProcessor(0.15, JOYSTICK_CENTER, JOYSTICK_MIN, JOYSTICK_MAX, 0.03),
+    new AxisPostProcessor(0.15, JOYSTICK_CENTER, JOYSTICK_MIN, JOYSTICK_MAX, 0.03),
+};
 
 Adafruit_USBD_HID usb_hid;
 
@@ -21,6 +27,11 @@ void setup() {
     SerialTinyUSB.begin(9600);
     StickSerial.begin(9600);
     StickReader.begin();
+
+    TinyUSBDevice.setManufacturerDescriptor("CurryMaker");
+    TinyUSBDevice.setProductDescriptor("Stick Mk2");
+    TinyUSBDevice.setID(0x1209, 0x0001);
+
     if (!TinyUSBDevice.isInitialized()) {
         TinyUSBDevice.begin(0);
     }
@@ -35,6 +46,8 @@ void setup() {
         delay(10);
         TinyUSBDevice.attach();
     }
+
+    // EEPROM.read(0x0);
 
     // while (!SerialTinyUSB);
 
@@ -67,7 +80,11 @@ String handleMessage() {
         bit += 1;
     }
     for (int i = 0; i < INPUT_JOYSTICK_COUNT; i++) {
-        out += "Joystick " + String(i) + " X: " + String(message.getJoystickX(i)) + " Y: " + String(message.getJoystickY(i));
+        ThumbstickProcessors[i*2]->process(message.getJoystickX(i));
+        ThumbstickProcessors[i*2 + 1]->process(message.getJoystickY(i));
+        gp.axes[2 + 2 * i] = ThumbstickProcessors[i*2]->getValue() * -127;
+        gp.axes[3 + 2 * i] = ThumbstickProcessors[i*2 + 1]->getValue() * 127;
+        out += "Joystick " + String(i) + " X: " + String(ThumbstickProcessors[i*2]->getValue()) + "(" + String(ThumbstickProcessors[i*2]->getRawValue()) + ") Y: " + String(ThumbstickProcessors[i*2+1]->getValue()) + "(" + String(ThumbstickProcessors[i*2+1]->getRawValue()) + ") || ";
     }
 
     return out;
@@ -90,6 +107,8 @@ void loop() {
     if (msg != "") {
         SerialTinyUSB.println(msg + " X: " + String(StickReader.getX()) + " (" + String(StickReader.getRawX()) + ") Y: " + String(StickReader.getY()) + " (" + String(StickReader.getRawY()) + ")");
     }
+
+    // Main stick
     gp.axes[0] = StickReader.getX() * 127;
     gp.axes[1] = StickReader.getY() * 127;
 

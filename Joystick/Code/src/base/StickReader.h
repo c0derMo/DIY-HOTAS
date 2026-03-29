@@ -11,14 +11,14 @@ class StickReader {
         uint32_t xPin;
         uint32_t yPin;
 
-        static const uint32_t minX = 570;
-        static const uint32_t maxX = 930;
+        static const uint32_t minX = 580;
+        static const uint32_t maxX = 1023;
         static const uint32_t centerX = 780;
         static const bool invertX = false;
 
-        static const uint32_t minY = 660;
-        static const uint32_t maxY = 805;
-        static const uint32_t centerY = 725;
+        static const uint32_t minY = 470;
+        static const uint32_t maxY = 760;
+        static const uint32_t centerY = 610;
         static const bool invertY = true;
 
         static constexpr double alpha = 0.2;

@@ -2,7 +2,7 @@
 #include <Adafruit_TinyUSB.h>
 #include "AxisPostProcessor.h"
 
-AxisPostProcessor::AxisPostProcessor(String prefix, double alpha, double center, double min, double max, double deadzone) {
+AxisPostProcessor::AxisPostProcessor(double alpha, double center, double min, double max, double deadzone) {
     this->alpha = alpha;
     this->center = center;
     this->min = min;
@@ -10,7 +10,6 @@ AxisPostProcessor::AxisPostProcessor(String prefix, double alpha, double center,
     this->deadzone = deadzone;
     this->rawValue = center;
     this->processedValue = 0.5;
-    this->prefix = prefix;
 }
 
 double AxisPostProcessor::filter(int value) {
@@ -42,20 +41,13 @@ double AxisPostProcessor::linearize(double value) {
 }
 
 void AxisPostProcessor::process(int value) {
+    this->rawValue = value;
     double filtered = this->filter(value);
-    this->rawValue = this->filter(value);
 
-    // SerialTinyUSB.print(this->prefix + "raw:" + String(value) + ",");
-    // SerialTinyUSB.print(this->prefix + "filtered:" + String(filtered) + ",");
-
-    double normalized = this->normalize(this->rawValue);
-    // SerialTinyUSB.print(this->prefix + "normalized:" + String(normalized) + ",");
+    double normalized = this->normalize(filtered);
     double clamped = this->clamp(normalized);
-    // SerialTinyUSB.print(this->prefix + "clamped:" + String(clamped) + ",");
     double deadzoned = this->applyDeadzone(clamped);
-    // SerialTinyUSB.print(this->prefix + "deadzoned:" + String(deadzoned) + ",");
     double linearized = this->linearize(deadzoned);
-    // SerialTinyUSB.print(this->prefix + "linearized:" + String(linearized) + ",");
     this->processedValue = linearized;
 }
 
