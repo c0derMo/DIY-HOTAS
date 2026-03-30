@@ -5,25 +5,28 @@
 
 class AxisPostProcessor {
     private:
-        double alpha;
         double rawValue;
         double processedValue;
-
-        double center;
-        double min;
-        double max;
+        
+        uint16_t center;
+        uint16_t min;
+        uint16_t max;
+        double alpha;
         double deadzone;
+        bool inverted;
+        double curve_exp;
 
-        double filter(int value);
+        double filter(uint32_t value);
         double normalize(double value);
         double clamp(double value);
         double applyDeadzone(double value);
         double linearize(double value);
     public:
-        AxisPostProcessor(double alpha, double center, double min, double max, double deadzone);
-        void process(int value);
+        AxisPostProcessor(double alpha, uint16_t center, uint16_t min, uint16_t max, double deadzone, bool inverted, double curve_exp);
+        void reconfigure(double alpha, uint16_t center, uint16_t min, uint16_t max, double deadzone, bool inverted, double curve_exp);
+        void process(uint32_t value);
         double getValue();
-        double getRawValue();
+        uint32_t getRawValue();
 };
 
 #endif

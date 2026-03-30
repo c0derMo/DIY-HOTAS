@@ -10,20 +10,6 @@ class StickReader {
         AxisPostProcessor *yAxis;
         uint32_t xPin;
         uint32_t yPin;
-
-        static const uint32_t minX = 580;
-        static const uint32_t maxX = 1023;
-        static const uint32_t centerX = 780;
-        static const bool invertX = false;
-
-        static const uint32_t minY = 470;
-        static const uint32_t maxY = 760;
-        static const uint32_t centerY = 610;
-        static const bool invertY = true;
-
-        static constexpr double alpha = 0.2;
-        static constexpr double deadzone = 0.03;
-
     public:
         StickReader(uint32_t xPin, uint32_t yPin);
         void begin();
@@ -32,6 +18,8 @@ class StickReader {
         double getY();
         double getRawX();
         double getRawY();
+        AxisPostProcessor *getXAxis();
+        AxisPostProcessor *getYAxis();
 };
 
 #endif

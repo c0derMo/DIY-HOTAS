@@ -1,15 +1,14 @@
 #include <Arduino.h>
-#include <Adafruit_TinyUSB.h>
 #include "StickReader.h"
 #include "AxisPostProcessor.h"
-#include "wiring_analog.h"
+#include "shared/config.h"
 
 StickReader::StickReader(uint32_t xPin, uint32_t yPin) {
     this->xPin = xPin;
     this->yPin = yPin;
 
-    this->xAxis = new AxisPostProcessor(this->alpha, this->centerX, this->minX, this->maxX, this->deadzone);
-    this->yAxis = new AxisPostProcessor(this->alpha, this->centerY, this->minY, this->maxY, this->deadzone);
+    this->xAxis = new AxisPostProcessor(STICK_ALPHA, STICK_X_CENTER, STICK_X_MIN, STICK_X_MAX, STICK_DEADZONE, STICK_X_INVERT, STICK_CURVE_EXP);
+    this->yAxis = new AxisPostProcessor(STICK_ALPHA, STICK_Y_CENTER, STICK_Y_MIN, STICK_Y_MAX, STICK_DEADZONE, STICK_Y_INVERT, STICK_CURVE_EXP);
 }
 
 void StickReader::begin() {
@@ -23,19 +22,11 @@ void StickReader::read() {
 }
 
 double StickReader::getX() {
-    if (StickReader::invertX) {
-        return -this->xAxis->getValue();
-    } else {
-        return this->xAxis->getValue();
-    }
+    return this->xAxis->getValue();
 }
 
 double StickReader::getY() {
-    if (StickReader::invertY) {
-        return -this->yAxis->getValue();
-    } else {
-        return this->yAxis->getValue();
-    }
+    return this->yAxis->getValue();
 }
 
 double StickReader::getRawX() {
@@ -44,4 +35,12 @@ double StickReader::getRawX() {
 
 double StickReader::getRawY() {
     return this->yAxis->getRawValue();
+}
+
+AxisPostProcessor *StickReader::getXAxis() {
+    return this->xAxis;
+}
+
+AxisPostProcessor *StickReader::getYAxis() {
+    return this->yAxis;
 }

@@ -2,9 +2,35 @@
 #define CONFIG_H
 
 #define DELAY_TIME 1
+#define POLL_INTERVAL_MS 2
 
 #define INPUT_5WAY_COUNT 4
 #define INPUT_BUTTON_COUNT 9
 #define INPUT_JOYSTICK_COUNT 1
+
+#define THUMBSTICK_MIN 90
+#define THUMBSTICK_MAX 930
+#define THUMBSTICK_CENTER 520
+#define THUMBSTICK_X_INVERT true
+#define THUMBSTICK_Y_INVERT false
+#define THUMBSTICK_ALPHA 0.15
+#define THUMBSTICK_DEADZONE 0.03
+#define THUMBSTICK_CURVE_EXP 2.0
+
+#define STICK_X_MIN 580
+#define STICK_X_MAX 1023
+#define STICK_X_CENTER 780
+#define STICK_X_INVERT false
+
+#define STICK_Y_MIN 470
+#define STICK_Y_MAX 760
+#define STICK_Y_CENTER 610
+#define STICK_Y_INVERT true
+
+#define STICK_ALPHA 0.2
+#define STICK_DEADZONE 0.03
+#define STICK_CURVE_EXP 2.0
+
+// #define ENABLE_SERIAL
 
 #endif

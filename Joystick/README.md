@@ -7,6 +7,8 @@
     - [No Z-Axis](#no-z-axis)
     - [No LEDs at the top](#no-leds-at-the-top)
   - [Tolerances and connecting parts together](#tolerances-and-connecting-parts-together)
+  - [Primary trigger spring](#primary-trigger-spring)
+  - [Different base](#different-base)
   - [3D Models](#3d-models)
       - [Z-Axis Connector Screw](#z-axis-connector-screw)
       - [Gimbal Mainframe \& Case](#gimbal-mainframe--case)
@@ -58,11 +60,24 @@ It may make frequent disassemblies / reassemblies a bit easier, with no plastic 
 If you use inserts, I recommend drilling the holes a bit bigger (or just making them bigger before printing), so your inserts don't get gummed up with molten plastic.
 (Happened to me several times.)
 
+## Primary trigger spring
+
+The primary trigger is double-action (very cool), but requires some fine spring adjustments to get it to work, as (from my understanding), a spring is supposed to push the first pushbutton while compressing, and the peg presses the second stage pushbutton once fully pushed.
+I couldn't find a fitting spring that would push the button when slightly compressed, so I went with a limitswitch (without the little metal bar) for the first stage, as that has a much lower required activation force.
+A spring pushes the limit switch when slightly compressed, and the peg presses a push button when fully pressed, encompasing the two stages of the primary trigger.
+
+## Different base
+
+After much of trial and error, due to the usage of cheap-ish bearings and different springs, I could not get the original gimbal to auto-center with my stick.
+I attempted to create my own cams and tried two different springs, but neither would work properly.
+In the end, I went ahead and built a [different base by Miramaksimus](https://github.com/Miramaksimus/HOTAS-Joystick-Soleil) which worked way better for me.
+I adapted some of the parts to work with the bearings, magnets and parts I had on hand.
+Since the licenses are compatible, I added my modified STLs to this repo as well.
+
 ## 3D Models
 
-I printed most of the 3D models from the `Righthanded Updated` folder of the original repo once, with some custom made models or replacements for some parts thrown in.
-When I have the time, I'll reorganize the stl-files a bit, and add my own here as well.
-Below are some notes on individual parts.
+I've merged the original `Righthanded Updated` and `Righthanded joystick` STL folders, and added my own additions in there as well.
+See the README in that folder for more details, in addition to the notes below.
 
 #### Z-Axis Connector Screw
 
