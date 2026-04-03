@@ -1,46 +1,60 @@
 #include <Arduino.h>
 #include "StickReader.h"
 #include "AxisPostProcessor.h"
+#include "Wire.h"
 #include "shared/config.h"
 
-StickReader::StickReader(uint32_t xPin, uint32_t yPin) {
-    this->xPin = xPin;
-    this->yPin = yPin;
+StickReader::StickReader(uint32_t xSDA, uint32_t xSCL, uint32_t ySDA, uint32_t ySCL) {
+    this->xAxis = new TwoWire(xSDA, xSCL);
+    this->yAxis = new TwoWire(ySDA, ySCL);
 
-    this->xAxis = new AxisPostProcessor(STICK_ALPHA, STICK_X_CENTER, STICK_X_MIN, STICK_X_MAX, STICK_DEADZONE, STICK_X_INVERT, STICK_CURVE_EXP);
-    this->yAxis = new AxisPostProcessor(STICK_ALPHA, STICK_Y_CENTER, STICK_Y_MIN, STICK_Y_MAX, STICK_DEADZONE, STICK_Y_INVERT, STICK_CURVE_EXP);
+    this->xAxisProcessor = new AxisPostProcessor(STICK_ALPHA, STICK_X_CENTER, STICK_X_MIN, STICK_X_MAX, STICK_DEADZONE, STICK_X_INVERT, STICK_CURVE_EXP);
+    this->yAxisProcessor = new AxisPostProcessor(STICK_ALPHA, STICK_Y_CENTER, STICK_Y_MIN, STICK_Y_MAX, STICK_DEADZONE, STICK_Y_INVERT, STICK_CURVE_EXP);
 }
 
 void StickReader::begin() {
-    pinMode(this->xPin, INPUT);
-    pinMode(this->yPin, INPUT);
+    this->xAxis->begin();
+    this->yAxis->begin();
+}
+
+uint16_t StickReader::readRawAngle(TwoWire *wire) {
+    wire->beginTransmission(AS5600_ADDR);
+    wire->write(ANGLE_REG);
+    wire->endTransmission();
+    wire->requestFrom(AS5600_ADDR, 2);
+    if (wire->available() == 2) {
+        uint8_t highByte = wire->read();
+        uint8_t lowByte = wire->read();
+        return (highByte << 8) | lowByte;
+    }
+    return 0;
 }
 
 void StickReader::read() {
-    this->xAxis->process(analogRead(this->xPin));
-    this->yAxis->process(analogRead(this->yPin));
+    this->xAxisProcessor->process(StickReader::readRawAngle(this->xAxis));
+    this->yAxisProcessor->process(StickReader::readRawAngle(this->yAxis));
 }
 
 double StickReader::getX() {
-    return this->xAxis->getValue();
+    return this->xAxisProcessor->getValue();
 }
 
 double StickReader::getY() {
-    return this->yAxis->getValue();
+    return this->yAxisProcessor->getValue();
 }
 
-double StickReader::getRawX() {
-    return this->xAxis->getRawValue();
+uint32_t StickReader::getRawX() {
+    return this->xAxisProcessor->getRawValue();
 }
 
-double StickReader::getRawY() {
-    return this->yAxis->getRawValue();
+uint32_t StickReader::getRawY() {
+    return this->yAxisProcessor->getRawValue();
 }
 
 AxisPostProcessor *StickReader::getXAxis() {
-    return this->xAxis;
+    return this->xAxisProcessor;
 }
 
 AxisPostProcessor *StickReader::getYAxis() {
-    return this->yAxis;
+    return this->yAxisProcessor;
 }

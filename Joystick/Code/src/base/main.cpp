@@ -9,7 +9,7 @@
 #include <Adafruit_TinyUSB.h>
 
 HardwareSerial StickSerial(PA3, PA2);
-StickReader StickReader(PB0, PB1);
+StickReader StickReader(PB7, PB6, PB3, PB10);
 
 AxisPostProcessor* ThumbstickProcessors[] = {
     new AxisPostProcessor(THUMBSTICK_ALPHA, THUMBSTICK_CENTER, THUMBSTICK_MIN, THUMBSTICK_MAX, THUMBSTICK_DEADZONE, THUMBSTICK_X_INVERT, THUMBSTICK_CURVE_EXP),
@@ -26,7 +26,6 @@ uint8_t messageBuffer[HOTASMessage::MAX_ENCODED_SIZE];
 
 void set_report_callback(uint8_t report_id, hid_report_type_t report_type, const uint8_t *buffer, uint16_t bufsize) {
     Config.hid_callback(report_id, report_type, buffer, bufsize);
-    usb_hid.sendReport(0, buffer, bufsize);
 }
 
 uint16_t get_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8_t *buffer, uint16_t reqlen) {
@@ -128,6 +127,7 @@ void loop() {
     // Main stick
     joystick_report.axes[0] = StickReader.getX() * 127;
     joystick_report.axes[1] = StickReader.getY() * 127;
+    // LOGF("axes", "X: %d, Y: %d", StickReader.getRawX(), StickReader.getRawY());
 
     if (TinyUSBDevice.mounted() && usb_hid.ready()) {
         bool joystick_send = usb_hid.sendReport(1, &joystick_report, sizeof(joystick_report));

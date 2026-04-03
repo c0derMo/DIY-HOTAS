@@ -32,7 +32,7 @@ enum JoystickAxis : uint8_t {
     THUMB_Y = 0x04,
 };
 
-enum JoystickConfigValue : uint8_t {
+enum AxisBoundary : uint8_t {
     MIN = 0x01,
     CENTER = 0x02,
     MAX = 0x03,
@@ -67,12 +67,12 @@ class ConfigManager {
         void set_defaults();
 
         void toggle_invert(JoystickAxis axis);
-        void record_value(JoystickAxis axis, JoystickConfigValue value);
+        void record_value(JoystickAxis axis, AxisBoundary value);
         void reconfigure_axis(JoystickAxis axis);
         void set_axis_deadzone(JoystickAxis axis, double deadzone);
         void set_axis_alpha(JoystickAxis axis, double alpha);
         void set_axis_curve_exp(JoystickAxis, double exp);
-        void set_uint16_value(JoystickAxis axis, JoystickConfigValue valueToSet, uint16_t value);
+        void set_uint16_value(JoystickAxis axis, AxisBoundary valueToSet, uint16_t value);
         void set_axis_config(JoystickAxis axis, axis_config config);
 
         void read_axis(JoystickAxis axis);

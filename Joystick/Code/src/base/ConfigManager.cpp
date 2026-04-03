@@ -118,7 +118,7 @@ void ConfigManager::hid_callback(uint8_t report_id, hid_report_type_t report_typ
             this->set_success_response(COMMAND_TOGGLE_INVERT);
             break;
         case COMMAND_RECORD_BOUNDARY:
-            this->record_value(static_cast<JoystickAxis>(buffer[2]), static_cast<JoystickConfigValue>(buffer[3]));
+            this->record_value(static_cast<JoystickAxis>(buffer[2]), static_cast<AxisBoundary>(buffer[3]));
             break;
         case COMMAND_SET_ALPHA:
             this->set_axis_alpha(static_cast<JoystickAxis>(buffer[2]), unpackDouble(&buffer[3]));
@@ -130,7 +130,7 @@ void ConfigManager::hid_callback(uint8_t report_id, hid_report_type_t report_typ
             this->set_axis_curve_exp(static_cast<JoystickAxis>(buffer[2]), unpackDouble(&buffer[3]));
             break;
         case COMMAND_SET_VALUE:
-            this->set_uint16_value(static_cast<JoystickAxis>(buffer[2]), static_cast<JoystickConfigValue>(buffer[3]), unpackUInt16(&buffer[4]));
+            this->set_uint16_value(static_cast<JoystickAxis>(buffer[2]), static_cast<AxisBoundary>(buffer[3]), unpackUInt16(&buffer[4]));
             break;
         case COMMAND_READ_AXIS:
             this->read_axis(static_cast<JoystickAxis>(buffer[2]));
@@ -242,7 +242,7 @@ void ConfigManager::toggle_invert(JoystickAxis axis) {
     this->set_axis_config(axis, config);
 }
 
-void ConfigManager::record_value(JoystickAxis axis, JoystickConfigValue value) {
+void ConfigManager::record_value(JoystickAxis axis, AxisBoundary value) {
     AxisPostProcessor *processor = this->get_axis_processor(axis);
     uint16_t rawValue = processor->getRawValue();
     axis_config config = this->get_axis_config(axis);
@@ -311,7 +311,7 @@ void ConfigManager::set_axis_curve_exp(JoystickAxis axis, double exp) {
     packDouble(exp, &this->pending_response[3]);
 }
 
-void ConfigManager::set_uint16_value(JoystickAxis axis, JoystickConfigValue valueToSet, uint16_t value) {
+void ConfigManager::set_uint16_value(JoystickAxis axis, AxisBoundary valueToSet, uint16_t value) {
     axis_config config = this->get_axis_config(axis);
     switch (valueToSet) {
         case MIN:
